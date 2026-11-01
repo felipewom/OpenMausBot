@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+body { margin:0; font-family: Inter, sans-serif; background:#f4f6f8; color:#1c1f26; }
+.wrap { padding:28px 32px; }
+h1 { margin:0 0 4px; font-size:22px; letter-spacing:-.03em; }
+p.lead { margin:0 0 18px; color:#667085; }
+.board { position:relative; height:640px; background:#fff; border:1px solid #e6e8ee; border-radius:16px; }
+.g { position:absolute; border:1.5px dashed #8b97a3; background:#f8fafc; border-radius:14px; padding:12px 14px; }
+.g b { display:block; font-size:13px; margin-bottom:8px; }
+.box { position:absolute; border-radius:10px; padding:10px 12px; font-size:13px; font-weight:650; line-height:1.35; box-shadow:0 1px 2px rgba(16,24,40,.06); }
+.user { background:#e6f2ff; border:1px solid #1b6ca8; }
+.plane { background:#ede7f6; border:1px solid #5e35b1; }
+.node { background:#fff3e0; border:1px solid #ef6c00; }
+.data { background:#e8f5e9; border:1px solid #2e7d32; }
+.ext { background:#f5f5f5; border:1px solid #757575; }
+.note { background:#fff8e1; border:1px solid #f9a825; font-weight:500; }
+svg.arrows { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+</style></head><body>
+    <div class="wrap"><h1>Agents Hub — Multi-server</h1><p class="lead">The plane is a separate VM. Nodes dial out. A standby does not run WhatsApp.</p>
+    <div class="board"><div class="g" style="left:30px;top:40px;width:280px;height:220px"><b>Plane VM</b></div><div class="g" style="left:340px;top:40px;width:250px;height:220px"><b>Node A</b></div><div class="g" style="left:620px;top:40px;width:230px;height:200px"><b>Node B</b></div><div class="g" style="left:880px;top:40px;width:250px;height:200px"><b>Node C</b></div><div class="box plane" style="left:60px;top:110px;width:210px;height:70px">Plane, Postgres metadata</div><div class="box node" style="left:370px;top:110px;width:190px;height:70px">Harness, ledger, WhatsApp</div><div class="box node" style="left:650px;top:100px;width:170px;height:64px">Design Studio</div><div class="box node" style="left:910px;top:100px;width:190px;height:64px">Standby replica, v1</div><div class="box note" style="left:340px;top:320px;width:460px;height:64px">MVP keeps A primary. v1 may promote C and will not move WhatsApp.</div>
+      <svg class="arrows"><defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5B6770"/></marker></defs><line x1="270" y1="145" x2="370" y2="145" stroke="#5B6770" stroke-width="1.6" marker-end="url(#arr)"/><line x1="560" y1="145" x2="650" y2="140" stroke="#5B6770" stroke-width="1.6" marker-end="url(#arr)"/><line x1="310" y1="180" x2="960" y2="164" stroke="#5B6770" stroke-width="1.6" marker-end="url(#arr)"/></svg>
+    </div></div></body></html>

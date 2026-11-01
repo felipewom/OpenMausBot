@@ -1,0 +1,659 @@
+[
+  {
+    "title": "Embedded control plane and first-run setup",
+    "description": "SQLite plane on the hub. POST /api/v1/setup creates the org and owner once.",
+    "epic": "Control plane",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Setup returns 409 after the first owner",
+      "Session cookie is HttpOnly",
+      "Listen stays loopback until an admin changes it"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/control-plane.md"
+  },
+  {
+    "title": "Home API for workspaces, nodes, and inbox counts",
+    "description": "GET /api/v1/home returns workspace status, node health, pending approvals, and node-hours.",
+    "epic": "Control plane",
+    "milestone": "MVP",
+    "priority": 2,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Offline node shows last cache and a timestamp",
+      "Mail bodies are not in the payload"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/control-plane.md"
+  },
+  {
+    "title": "Node pairing with a one-time code",
+    "description": "Admin mints a code. The node redeems it from stdin. The plane stores a hash.",
+    "epic": "Node agent",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Code expires in 10 minutes and is single use",
+      "Token file is mode 0600",
+      "Revoke makes the next heartbeat 401"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/node-agent-pairing.md"
+  },
+  {
+    "title": "Heartbeat and long-poll work items",
+    "description": "Node dials the plane every 15s and long-polls for decisions and placements.",
+    "epic": "Node agent",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Status moves online, degraded, offline on the documented ages",
+      "A NAT node needs no inbound port"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/node-agent-pairing.md"
+  },
+  {
+    "title": "Docker and desktop install shapes",
+    "description": "Same agent on the Mac app and on Compose.",
+    "epic": "Node agent",
+    "milestone": "MVP",
+    "priority": 2,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Compose pair reads the code from stdin",
+      "Desktop can be the embedded plane"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/node-agent-pairing.md"
+  },
+  {
+    "title": "Create a workspace pinned to one node",
+    "description": "Admin names a workspace and a primary node.",
+    "epic": "Workspaces",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "S",
+    "acceptanceCriteria": [
+      "A second primary is 409",
+      "Personal flag hides invites"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/scheduling-failover.md"
+  },
+  {
+    "title": "Move a workspace between nodes",
+    "description": "Copy, check counts, freeze source, unfreeze target.",
+    "epic": "Workspaces",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "L",
+    "acceptanceCriteria": [
+      "Mismatch discards the import",
+      "Routines do not run on both",
+      "WhatsApp session is not copied",
+      "Ledger repo moves with the data dir"
+    ],
+    "dependencies": [
+      "Create a workspace pinned to one node"
+    ],
+    "spec": "docs/product/03-specs/scheduling-failover.md"
+  },
+  {
+    "title": "Show offline instead of failing over",
+    "description": "Pinned MVP does not start work on another node.",
+    "epic": "Workspaces",
+    "milestone": "MVP",
+    "priority": 2,
+    "estimate": "S",
+    "acceptanceCriteria": [
+      "Home says Offline",
+      "Inbox triage does not run"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/04-flows/node-offline.md"
+  },
+  {
+    "title": "Standby replica and fenced failover",
+    "description": "Promote a standby when the primary is offline and the replica is fresh.",
+    "epic": "Workspaces",
+    "milestone": "v1",
+    "priority": 3,
+    "estimate": "L",
+    "acceptanceCriteria": [
+      "Old primary stays frozen if it returns",
+      "Sticky WhatsApp stays paused",
+      "Lease bounds split brain"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/scheduling-failover.md"
+  },
+  {
+    "title": "Main-agent flag on a bot",
+    "description": "One bot per workspace has role main and is the only ledger writer.",
+    "epic": "Bot runtime",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "S",
+    "acceptanceCriteria": [
+      "A second main is rejected",
+      "Other bots can propose and cannot commit"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/learning-ledger.md"
+  },
+  {
+    "title": "Drop upstream included model credentials",
+    "description": "No trial relay, no included Boat key.",
+    "epic": "Bot runtime",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Packaged defaults contain none of the banned hosts",
+      "A person's own key still works"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/update-channel.md"
+  },
+  {
+    "title": "Retire runOn cloud",
+    "description": "Routines run only on an unfrozen primary.",
+    "epic": "Routines",
+    "milestone": "MVP",
+    "priority": 2,
+    "estimate": "S",
+    "acceptanceCriteria": [
+      "A frozen node does not fire schedules"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/routines-triggers.md"
+  },
+  {
+    "title": "Inbox morning routine",
+    "description": "System routine at 07:30 that runs triage.",
+    "epic": "Routines",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Overlap skip",
+      "Missed when the node is offline",
+      "Cursor does not skip mail"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/inbox-autopilot.md"
+  },
+  {
+    "title": "Connector provider interface",
+    "description": "Composio, Pipedream, Nango, and MCP behind one interface.",
+    "epic": "Connectors",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "L",
+    "acceptanceCriteria": [
+      "Plane stores labels not refresh tokens",
+      "Upstream broker URL is not the default"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/connectors.md"
+  },
+  {
+    "title": "Bind Gmail as an inbox account",
+    "description": "A connection can be marked inbox.",
+    "epic": "Connectors",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "A generic trigger does not become triage",
+      "Auth expiry stops triage and says reconnect"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/inbox-autopilot.md"
+  },
+  {
+    "title": "WhatsApp bridge adapter",
+    "description": "HTTP adapter to the existing daemon. Allowlist. Sticky.",
+    "epic": "Channels",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "L",
+    "acceptanceCriteria": [
+      "Unknown senders are dropped",
+      "Outbound send requires approval",
+      "Session is not stored on the plane"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/messaging-channels.md"
+  },
+  {
+    "title": "Keep the phone WhatsApp sheet",
+    "description": "PHONE_SEND_WHATSAPP still works without a bridge.",
+    "epic": "Channels",
+    "milestone": "MVP",
+    "priority": 2,
+    "estimate": "S",
+    "acceptanceCriteria": [
+      "Both channels can be on"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/messaging-channels.md"
+  },
+  {
+    "title": "Init the private ledger repo",
+    "description": "First decision creates a git repo mode 0700 with no remote.",
+    "epic": "Learning ledger",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "README and empty decisions.jsonl exist",
+      "Shell bots cannot write the repo"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/learning-ledger.md"
+  },
+  {
+    "title": "Append decisions.jsonl",
+    "description": "Every keep, archive, trash, label, approve, reject, and edit_draft writes action, reason, decided_by, and date.",
+    "epic": "Learning ledger",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Full mail bodies are not stored",
+      "A missing reason is confirmed in one sentence",
+      "Cancel writes nothing"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/learning-ledger.md"
+  },
+  {
+    "title": "Compile sender and category YAML",
+    "description": "YAML is a pure function of the log and policy.yaml. One commit per decision.",
+    "epic": "Learning ledger",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Sender beats category",
+      "Reject resets trust to ask",
+      "git log message has no subject or body"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/learning-ledger.md"
+  },
+  {
+    "title": "ledger.read for every agent",
+    "description": "Agents must read before a destructive or outgoing action.",
+    "epic": "Learning ledger",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "No match means ask",
+      "A harness call that acts without a match is rejected"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/learning-ledger.md"
+  },
+  {
+    "title": "Revert a ledger commit",
+    "description": "Admin revert writes a new reject and recompiles. History is kept.",
+    "epic": "Learning ledger",
+    "milestone": "MVP",
+    "priority": 2,
+    "estimate": "S",
+    "acceptanceCriteria": [
+      "The revert itself is a decision"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/learning-ledger.md"
+  },
+  {
+    "title": "Ledger page",
+    "description": "Show YAML, the log, and commits. File text comes from the node.",
+    "epic": "Learning ledger",
+    "milestone": "MVP",
+    "priority": 2,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Guests cannot open it",
+      "The plane database does not keep the YAML"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/04-flows/learning-loop.md"
+  },
+  {
+    "title": "Split inbox Important and Other",
+    "description": "Triage classifies new Gmail using the ledger.",
+    "epic": "Inbox autopilot",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "L",
+    "acceptanceCriteria": [
+      "Unknown people stay Important",
+      "Unknown bulk stays unresolved",
+      "Known archive trust archives without a card"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/inbox-autopilot.md"
+  },
+  {
+    "title": "Cleanup batch approval",
+    "description": "Unresolved mail groups into one card per sender.",
+    "epic": "Inbox autopilot",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Approve writes one decision and applies those ids",
+      "Reject writes reject and leaves the mail",
+      "Unchecking rows archives only the rest"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/04-flows/approving-cleanup.md"
+  },
+  {
+    "title": "Reply drafts that do not send",
+    "description": "Drafts land in Gmail and in the queue.",
+    "epic": "Inbox autopilot",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Edit writes edit_draft",
+      "Send requires approve",
+      "Archive decisions do not grant send"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/inbox-autopilot.md"
+  },
+  {
+    "title": "Snooze, reminders, and follow-up nudges",
+    "description": "One-off times live outside the rule files. A nudge is a card.",
+    "epic": "Inbox autopilot",
+    "milestone": "MVP",
+    "priority": 2,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Always snooze is the only snooze that becomes a decision",
+      "Sending a nudge is a send"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/inbox-autopilot.md"
+  },
+  {
+    "title": "Trust thresholds and earned-send switch",
+    "description": "Defaults: archive after 3, trash after 5, label after 2, outgoing off.",
+    "epic": "Inbox autopilot",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Only the owner can enable earned send",
+      "Send trust is per sender and never inferred from edits"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/inbox-autopilot.md"
+  },
+  {
+    "title": "Outlook inbox provider",
+    "description": "Same triage through Pipedream or Nango.",
+    "epic": "Inbox autopilot",
+    "milestone": "v1",
+    "priority": 3,
+    "estimate": "L",
+    "acceptanceCriteria": [
+      "Gmail behavior does not change",
+      "Tokens stay at the provider"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/inbox-autopilot.md"
+  },
+  {
+    "title": "Approval metadata and apply path",
+    "description": "Plane stores title and prompt hash. Node applies the decision.",
+    "epic": "Approvals",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Stale hash is refused",
+      "Expiry denies the side effect",
+      "Ledger proposal runs after a recorded decision"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/approvals-question-queue.md"
+  },
+  {
+    "title": "Node-hour meter",
+    "description": "Managed placement time rolls up. Attached nodes are shown and not billed.",
+    "epic": "Usage",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Self-host has no denominator",
+      "Duplicate samples are ignored",
+      "Tokens stay a separate estimate"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/usage-metering.md"
+  },
+  {
+    "title": "Cap managed routines at 100%",
+    "description": "When the pool is full and overage is off, new routine starts pause.",
+    "epic": "Usage",
+    "milestone": "v1",
+    "priority": 3,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Chats still run",
+      "Data is not deleted"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/usage-metering.md"
+  },
+  {
+    "title": "Billing page for self-host",
+    "description": "Explains there is nothing to pay.",
+    "epic": "Billing",
+    "milestone": "MVP",
+    "priority": 2,
+    "estimate": "S",
+    "acceptanceCriteria": [
+      "No card form",
+      "No call to Dodo"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/billing.md"
+  },
+  {
+    "title": "Managed checkout handoff",
+    "description": "Web checkout via a processor the owner chooses. Webhook sets the hour allowance.",
+    "epic": "Billing",
+    "milestone": "v1",
+    "priority": 2,
+    "estimate": "L",
+    "acceptanceCriteria": [
+      "Desktop only receives a handoff code",
+      "Replay of the webhook is ignored",
+      "Cancel keeps attached nodes"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/billing.md"
+  },
+  {
+    "title": "Invites and roles",
+    "description": "Owner, admin, member. Ledger read and revert follow the table.",
+    "epic": "Team",
+    "milestone": "MVP",
+    "priority": 2,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Invite expires in 7 days",
+      "Removing a member kills sessions",
+      "Members do not see other direct transcripts by default"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/team-rbac.md"
+  },
+  {
+    "title": "Phone pairing page",
+    "description": "QR to the node. Phone can approve cleanup and cannot edit policy.",
+    "epic": "Phone",
+    "milestone": "MVP",
+    "priority": 2,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Code is single use",
+      "Earned send is not available on the phone"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/phone-mobile.md"
+  },
+  {
+    "title": "Backup includes the ledger",
+    "description": "Encrypted backup keeps the git repo and drops secrets and WhatsApp sessions.",
+    "epic": "Backups",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Restore pauses routines",
+      "Trust rules come back",
+      "Truncating the ledger fails the backup"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/backups-migration.md"
+  },
+  {
+    "title": "Import an upstream OpenMausBot backup",
+    "description": "Restore bots without calling upstream and without inventing ledger rules.",
+    "epic": "Backups",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "enterprise data is skipped",
+      "Old cards are not compiled into rules"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/04-flows/migrate-upstream.md"
+  },
+  {
+    "title": "Point updates at the fork",
+    "description": "Feed URL is the owner's. autoDownload stays false.",
+    "epic": "Updates",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Windows feed includes latest.yml",
+      "Upstream GitHub is not the default"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/update-channel.md"
+  },
+  {
+    "title": "Ban upstream hosts in the packaged build",
+    "description": "A test fails if packaged defaults contain the cloud, account, broker, PostHog, checkout, or relay hosts.",
+    "epic": "Updates",
+    "milestone": "MVP",
+    "priority": 1,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "The test is in CI",
+      "CloudProPopup and the cloud-pro notice are unmounted"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/update-channel.md"
+  },
+  {
+    "title": "Desktop What's new carousel",
+    "description": "Three local slides over the bot list: sleep, node-hours, open the hub.",
+    "epic": "Desktop hand-off",
+    "milestone": "MVP",
+    "priority": 2,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "Not now remembers the release id",
+      "Open Agents Hub uses a 60s handoff",
+      "No Get Pro and no upstream URL"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/04-flows/whats-new.md"
+  },
+  {
+    "title": "Slack channel adapter",
+    "description": "Slack app on the node or a connector trigger, same channel row.",
+    "epic": "Channels",
+    "milestone": "v1",
+    "priority": 3,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "enterprise hosted Slack URL is not used"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/messaging-channels.md"
+  },
+  {
+    "title": "Scheduled backup to a second disk",
+    "description": "Copy the encrypted archive to a folder or S3-compatible bucket.",
+    "epic": "Backups",
+    "milestone": "v1",
+    "priority": 3,
+    "estimate": "M",
+    "acceptanceCriteria": [
+      "The bucket receives ciphertext"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/backups-migration.md"
+  },
+  {
+    "title": "OIDC for the plane",
+    "description": "Self-host can use an identity provider.",
+    "epic": "Control plane",
+    "milestone": "v1",
+    "priority": 4,
+    "estimate": "L",
+    "acceptanceCriteria": [
+      "Password login still works"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/control-plane.md"
+  },
+  {
+    "title": "Official WhatsApp Business adapter",
+    "description": "A supported business-number path beside the existing bridge.",
+    "epic": "Channels",
+    "milestone": "later",
+    "priority": 4,
+    "estimate": "L",
+    "acceptanceCriteria": [
+      "The unofficial bridge is unchanged",
+      "No bulk send tools"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/messaging-channels.md"
+  },
+  {
+    "title": "Hermes or other runtime as a node adapter",
+    "description": "Another agent binary can sit behind the node contract.",
+    "epic": "Bot runtime",
+    "milestone": "later",
+    "priority": 4,
+    "estimate": "L",
+    "acceptanceCriteria": [
+      "The ledger tool is still the only write path"
+    ],
+    "dependencies": [],
+    "spec": "docs/product/03-specs/bot-runtime.md"
+  }
+]

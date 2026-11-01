@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Agents Hub — review</title>
+  <style>
+    :root { --ink:#1c1f26; --muted:#667085; --line:#e6e8ee; --teal:#0e6e6a; --bg:#f6f7f9; }
+    body { margin:0; font-family: Inter, "Segoe UI", sans-serif; color:var(--ink); background:var(--bg); }
+    header { padding:36px 48px 12px; }
+    h1 { font-size:40px; letter-spacing:-.04em; margin:0; }
+    h2 { margin:36px 0 8px; font-size:22px; }
+    main { padding:0 48px 64px; max-width:1100px; }
+    .muted { color:var(--muted); }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    figure { margin:0; background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+    img { width:100%; display:block; }
+    figcaption { padding:8px 12px; font-size:13px; color:var(--muted); }
+    .q { background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin:10px 0; }
+    .q b { color:var(--teal); }
+    a { color:var(--teal); }
+    table { width:100%; border-collapse:collapse; background:#fff; }
+    th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); font-size:14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="muted">Discovery review · 1 Nov 2026</div>
+    <h1>Agents Hub</h1>
+    <p class="muted">A control plane for bots that can run on a homelab, a VPS, and a managed machine at once. The main agent learns from decisions. The inbox is triaged from that ledger. Upstream’s Cloud upsell is replaced, not restyled.</p>
+  </header>
+  <main>
+    <h2>What this is</h2>
+    <p>The fork already has bots, routines, approvals, a phone, Tailscale, and a one-machine Cloud client. Agents Hub keeps the harness and adds a plane, nodes, a private git ledger, and an inbox. The full write-up is in <a href="02-prd.md">the PRD</a>, <a href="03-specs/README.md">the specs</a>, and <a href="04-flows/README.md">the flows</a>. Tickets: <a href="07-tickets/tickets.md">46 across 17 epics</a>.</p>
+    <table>
+      <tr><th>Keep from upstream</th><th>Replace</th></tr>
+      <tr><td>Bots, routines, approval cards, phone pairing, encrypted backups, bring-your-own model</td><td>The What’s new modal, Cloud Pro checkout, included Boat and trial AI, PostHog, their Composio broker, their updater</td></tr>
+      <tr><td>Per-cloud plans and a used/included hour meter, as an idea</td><td>Hours become node-hours. Only managed nodes draw the pool. The desktop does not take payment.</td></tr>
+    </table>
+
+    <h2>Mockups</h2>
+    <div class="grid">
+      <figure><img src="06-prototype/screens/home.png" alt="Home" /><figcaption>Home. Workspaces, node-hours, inbox, ledger.</figcaption></figure>
+      <figure><img src="06-prototype/screens/whatsnew.png" alt="What's new" /><figcaption>Desktop What’s new. Not now, dots, Next. No Get Pro.</figcaption></figure>
+      <figure><img src="06-prototype/screens/inbox.png" alt="Inbox" /><figcaption>Split inbox. Important on the left. A cleanup batch on the right.</figcaption></figure>
+      <figure><img src="06-prototype/screens/ledger.png" alt="Ledger" /><figcaption>Ledger. senders.yaml, decisions.jsonl, outgoing trust off.</figcaption></figure>
+      <figure><img src="06-prototype/screens/billing.png" alt="Billing" /><figcaption>Billing on the web. Self-host is $0.</figcaption></figure>
+      <figure><img src="06-prototype/screens/landing.png" alt="Landing" /><figcaption>Landing.</figcaption></figure>
+    </div>
+    <p class="muted">Every page is in <a href="06-prototype/index.html">06-prototype/index.html</a> and <a href="06-prototype/screens/">screens/</a>.</p>
+
+    <h2>Topologies</h2>
+    <div class="grid">
+      <figure><img src="05-architecture/all-local.png" alt="All local" /><figcaption>All local. Editable file: all-local.drawio</figcaption></figure>
+      <figure><img src="05-architecture/hybrid.png" alt="Hybrid" /><figcaption>Hybrid. Hub, VPS, sleeping laptop.</figcaption></figure>
+      <figure><img src="05-architecture/multi-server.png" alt="Multi-server" /><figcaption>Multi-server. Plane on its own VM.</figcaption></figure>
+      <figure><img src="05-architecture/data-flow.png" alt="Data flow" /><figcaption>Data flow. Ledger commit, mail stays at the provider.</figcaption></figure>
+    </div>
+
+    <h2>How the new loops work</h2>
+    <ol>
+      <li><a href="04-flows/learning-loop.md">Learning loop.</a> A keep, archive, trash, label, approve, reject, or draft edit becomes one git commit. The line has action, reason, decided_by, and date. Other agents read the compiled YAML and ask only on a miss.</li>
+      <li><a href="04-flows/inbox-triage.md">Inbox triage.</a> New Gmail is split into Important and Other. A matching archive rule is applied. Anything new waits.</li>
+      <li><a href="04-flows/approving-cleanup.md">Approving cleanup.</a> Fourteen newsletters are one card. Approving writes the rule and archives those messages. Sending is a different card.</li>
+      <li><a href="04-flows/whats-new.md">What’s new.</a> The desktop carousel hands off to the website. Checkout is not in the app.</li>
+    </ol>
+
+    <h2>Decisions</h2>
+    <div class="q"><b>Recommended.</b> Earned send stays off. Archive can become quiet after three consistent decisions. Trash needs five, and archive trust first. A reject resets that sender.</div>
+    <div class="q"><b>Recommended.</b> The ledger is a private git repo on the node. One main agent writes it. The plane does not keep a copy.</div>
+    <div class="q"><b>Recommended.</b> Gmail first. Outlook next. Agents Hub triages and drafts. It does not replace the mailbox.</div>
+    <div class="q"><b>Recommended.</b> First install embeds the plane on the hub. Managed billing, if sold, is Stripe-or-equivalent on the website. Not Dodo. Not upstream.</div>
+    <div class="q"><b>Needs you.</b> Confirm whether agents-hub.app is already yours. getagentshub.com was unregistered on 1 Nov 2026. Ask counsel about USPTO AGENTHUB registration 7707945 before ads or a filing. Assistants Hub is the fallback if Agents Hub should not be the commercial name. Details in <a href="01-naming.md">01-naming.md</a>.</div>
+    <div class="q"><b>Needs you.</b> A multi-tenant hosted product should not resell Composio without a deal. A single homelab can use your own Composio project.</div>
+
+    <h2>License, short version</h2>
+    <p>The fork outside <code>enterprise/</code> is Apache-2.0, so a commercial service and an open-source release are both allowed if notices stay and changes are marked. The license does not grant the OpenMausBot or Maus names. <code>enterprise/</code> is a different license and is not part of this product. This is not legal advice. See <a href="00-research.md">00-research.md</a>.</p>
+  </main>
+</body>
+</html>

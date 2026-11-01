@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+body { margin:0; font-family: Inter, sans-serif; background:#f4f6f8; color:#1c1f26; }
+.wrap { padding:28px 32px; }
+h1 { margin:0 0 4px; font-size:22px; letter-spacing:-.03em; }
+p.lead { margin:0 0 18px; color:#667085; }
+.board { position:relative; height:640px; background:#fff; border:1px solid #e6e8ee; border-radius:16px; }
+.g { position:absolute; border:1.5px dashed #8b97a3; background:#f8fafc; border-radius:14px; padding:12px 14px; }
+.g b { display:block; font-size:13px; margin-bottom:8px; }
+.box { position:absolute; border-radius:10px; padding:10px 12px; font-size:13px; font-weight:650; line-height:1.35; box-shadow:0 1px 2px rgba(16,24,40,.06); }
+.user { background:#e6f2ff; border:1px solid #1b6ca8; }
+.plane { background:#ede7f6; border:1px solid #5e35b1; }
+.node { background:#fff3e0; border:1px solid #ef6c00; }
+.data { background:#e8f5e9; border:1px solid #2e7d32; }
+.ext { background:#f5f5f5; border:1px solid #757575; }
+.note { background:#fff8e1; border:1px solid #f9a825; font-weight:500; }
+svg.arrows { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+</style></head><body>
+    <div class="wrap"><h1>Agents Hub — All local</h1><p class="lead">One homelab machine. The plane is embedded. The ledger and WhatsApp stay on it.</p>
+    <div class="board"><div class="g" style="left:30px;top:30px;width:1040px;height:560px"><b>Homelab</b></div><div class="box user" style="left:60px;top:120px;width:190px;height:64px">Alex, browser, phone</div><div class="box plane" style="left:300px;top:110px;width:200px;height:70px">Control plane, embedded</div><div class="box node" style="left:560px;top:110px;width:210px;height:70px">Node agent and harness</div><div class="box node" style="left:820px;top:110px;width:210px;height:70px">Bots, routines, inbox</div><div class="box data" style="left:560px;top:280px;width:210px;height:80px">Data dir and ledger git</div><div class="box ext" style="left:820px;top:250px;width:210px;height:64px">WhatsApp bridge, sticky</div><div class="box ext" style="left:820px;top:360px;width:210px;height:64px">Gmail on your connector</div><div class="box note" style="left:60px;top:420px;width:300px;height:70px">No upstream hosts. Attached hours are not billed.</div>
+      <svg class="arrows"><defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5B6770"/></marker></defs><line x1="250" y1="150" x2="300" y2="150" stroke="#5B6770" stroke-width="1.6" marker-end="url(#arr)"/><line x1="500" y1="145" x2="560" y2="145" stroke="#5B6770" stroke-width="1.6" marker-end="url(#arr)"/><line x1="770" y1="145" x2="820" y2="145" stroke="#5B6770" stroke-width="1.6" marker-end="url(#arr)"/><line x1="665" y1="180" x2="665" y2="280" stroke="#5B6770" stroke-width="1.6" marker-end="url(#arr)"/><line x1="925" y1="180" x2="925" y2="250" stroke="#5B6770" stroke-width="1.6" marker-end="url(#arr)"/></svg>
+    </div></div></body></html>
